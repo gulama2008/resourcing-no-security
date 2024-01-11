@@ -1,6 +1,7 @@
 package com.siyu.resourcing.job;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.siyu.resourcing.temp.Temp;
 
 import jakarta.persistence.CascadeType;
@@ -37,6 +38,7 @@ public class Job {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "temp_id")
+    // @JsonIgnore
     private Temp temp;
 
     public Job() {

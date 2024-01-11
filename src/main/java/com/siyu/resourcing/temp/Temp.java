@@ -3,6 +3,7 @@ package com.siyu.resourcing.temp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.siyu.resourcing.job.Job;
 
 import jakarta.persistence.CascadeType;
@@ -30,6 +31,7 @@ public class Temp {
     private String lastName;
 
     @OneToMany(mappedBy = "temp", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Job> jobs=new ArrayList<Job>();
 
     public Temp() {

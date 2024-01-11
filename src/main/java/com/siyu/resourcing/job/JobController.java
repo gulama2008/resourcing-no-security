@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.siyu.resourcing.exceptions.NotFoundException;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/jobs")
@@ -27,8 +29,9 @@ public class JobController {
     private JobService jobService;
 
     @GetMapping
-    public ResponseEntity<List<Job>> getAll() {
-        List<Job> jobs = this.jobService.getAll();
+    public ResponseEntity<List<Job>> getAll(@RequestParam(required = false) Optional<Boolean> assigned) {
+        
+        List<Job> jobs = this.jobService.getAll(assigned);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
@@ -53,14 +56,20 @@ public class JobController {
     @PatchMapping("/{id}")
     public ResponseEntity<Job> updateById(@PathVariable Long id, @Valid @RequestBody JobUpdateDTO data) {
         Optional<Job> updated = this.jobService.updateById(id, data);
-        if(updated==null){
+        if (updated == null) {
             throw new NotFoundException(
-                String.format("Temp with id %d does not exist, could not update", data.getTempId()));
+                    String.format("Temp with id %d does not exist, could not update", data.getTempId()));
         }
         if (updated.isPresent()) {
-			return new ResponseEntity<Job>(updated.get(), HttpStatus.OK);
-		}
+            return new ResponseEntity<Job>(updated.get(), HttpStatus.OK);
+        }
         throw new NotFoundException(String.format("Job with id %d does not exist, could not update", id));
     }
+    
+    // @GetMapping
+    // public ResponseEntity<List<Job>> getByAssigned(@RequestParam boolean assigned) {
+    //     List<Job> jobs = this.jobService.getByAssigned(assigned);
+    //     return new ResponseEntity<>(jobs, HttpStatus.OK);
+    // }
     
 }

@@ -25,7 +25,10 @@ public class JobService {
     @Autowired
     private TempRepository tempRepository;
 
-    public List<Job> getAll() {
+    public List<Job> getAll(Optional<Boolean> assigned) {
+        if (assigned.isPresent()) {
+            return this.getByAssigned(assigned.get());
+        }
         return this.jobRepository.findAll();
     }
 
@@ -70,6 +73,14 @@ public class JobService {
             }
             return null;
         }
-	    return foundJob;
+        return foundJob;
+    }
+    
+    public List<Job> getByAssigned(boolean assigned) {
+        System.out.println(assigned);
+        if (assigned) {
+            return this.jobRepository.findByTempIsNotNull();
+        }
+        return this.jobRepository.findByTempIsNull();
     }
 }
